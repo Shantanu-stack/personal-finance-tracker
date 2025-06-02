@@ -1,6 +1,7 @@
 package com.example.personal_finance_tracker.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDate;
 
 @Entity
@@ -10,11 +11,18 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Description is required")
     private String description;
+
     private Double amount;
+
+    @NotBlank(message = "Category is required")
     private String category;
+
     private LocalDate date;
-    private String type; // Income or Expense
+
+    @NotBlank(message = "Type is required")
+    private String type;
 
     // Getters and Setters
     public Long getId() {

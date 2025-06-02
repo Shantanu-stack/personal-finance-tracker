@@ -3,14 +3,196 @@
 <head>
   <meta charset="UTF-8">
   <title>Dashboard</title>
+
+  <!-- Bootstrap CDN -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"  rel="stylesheet">
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- 💅 Inline CSS -->
+  <style>
+        body {
+            background-color: #f4f6f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+             background-image: url('https://source.unsplash.com/random/1600x900/?finance');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        color: white; /* Ensure text is readable */
+
+
+        }
+
+        .navbar {
+            background-color: #2a3c5a;
+        }
+
+        .navbar-brand {
+            color: white !important;
+        }
+
+        .card {
+            margin-top: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent card */
+            color: black; /* Ensure card text is readable */
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        h3.card-title {
+            text-align: center;
+            font-weight: bold;
+            color: #333;
+        }
+
+        canvas#categoryChart,
+        canvas#incomeChart {
+            max-width: 400px;
+            max-height: 400px;
+            margin: auto;
+        }
+    </style>
 </head>
 <body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark mb-4">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Finance Tracker</a>
+  </div>
+</nav>
+
 <div class="container mt-4">
-  <h2>Welcome to Your Personal Finance Tracker</h2>
-  <p>Track and manage your income and expenses easily.</p>
-  <a th:href="@{/transactions}" class="btn btn-primary">View Transactions</a>
-  <a th:href="@{/transactions/add}" class="btn btn-success">Add New Transaction</a>
+  <h2 class="text-center mb-4">Welcome to Your Personal Finance Tracker</h2>
+  <p class="text-center">Track and manage your income and expenses easily.</p>
+
+  <div class="d-flex justify-content-center gap-3 mb-5">
+    <a th:href="@{/transactions}" class="btn btn-primary">View Transactions</a>
+    <a th:href="@{/transactions/add}" class="btn btn-success">Add New Transaction</a>
+  </div>
+
+  <!-- Expenses by Category Chart -->
+  <div class="card mx-auto shadow-sm">
+    <div class="card-body">
+      <h3 class="card-title">Expenses by Category</h3>
+      <canvas id="categoryChart" width="400" height="400"></canvas>
+    </div>
+  </div>
+
+  <!-- Income by Category Chart -->
+  <div class="card mx-auto shadow-sm mt-4">
+    <div class="card-body">
+      <h3 class="card-title">Income by Category</h3>
+      <canvas id="incomeChart" width="400" height="400"></canvas>
+    </div>
+  </div>
 </div>
+
+<!-- Chart Scripts -->
+<script>
+    // Fetch and render Expenses by Category chart
+    document.addEventListener('DOMContentLoaded', function () {
+        fetch('/api/transactions/type/Expense')
+            .then(response => response.json())
+            .then(expenses => {
+
+                const categories = {};
+
+                expenses.forEach(e => {
+                    if (!categories[e.category]) categories[e.category] = 0;
+                    categories[e.category] += e.amount;
+                });
+
+                const labels = Object.keys(categories);
+                const data = Object.values(categories);
+
+                new Chart(document.getElementById('categoryChart'), {
+                    type: 'pie',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Expenses by Category',
+                            data: data,
+                            backgroundColor: [
+                                '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'right',
+                            },
+                            title: {
+                                display: true,
+                                text: 'Expenses by Category'
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching or rendering chart:', error);
+            });
+    });
+
+    // Fetch and render Income by Category chart
+    document.addEventListener('DOMContentLoaded', function () {
+        fetch('/api/transactions/type/Income')
+            .then(response => response.json())
+            .then(income => {
+
+                const categories = {};
+
+                income.forEach(e => {
+                    if (!categories[e.category]) categories[e.category] = 0;
+                    categories[e.category] += e.amount;
+                });
+
+                const labels = Object.keys(categories);
+                const data = Object.values(categories);
+
+                new Chart(document.getElementById('incomeChart'), {
+                    type: 'pie',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Income by Category',
+                            data: data,
+                            backgroundColor: [
+                                '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'right',
+                            },
+                            title: {
+                                display: true,
+                                text: 'Income by Category'
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching or rendering chart:', error);
+            });
+    });
+</script>
+
 </body>
 </html>

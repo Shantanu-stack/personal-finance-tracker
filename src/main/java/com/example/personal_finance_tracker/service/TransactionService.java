@@ -24,6 +24,9 @@ public class TransactionService {
     }
 
     public void deleteTransaction(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("Transaction ID cannot be null");
+        }
         transactionRepository.deleteById(id);
     }
 

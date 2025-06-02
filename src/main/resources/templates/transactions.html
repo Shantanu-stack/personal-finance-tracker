@@ -27,7 +27,7 @@
       <td th:text="${transaction.amount}"></td>
       <td th:text="${transaction.category}"></td>
       <td th:text="${#temporals.format(transaction.date, 'yyyy-MM-dd')}"></td>
-      <td th:text="${transaction.type}"></td>
+      <td th:text="${transaction.type}"></td> <!-- Make sure this is present -->
       <td>
         <a th:href="@{/transactions/delete/{id}(id=${transaction.id})}" class="btn btn-danger btn-sm">Delete</a>
       </td>

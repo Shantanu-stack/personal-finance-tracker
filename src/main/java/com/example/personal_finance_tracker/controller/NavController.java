@@ -1,14 +1,13 @@
 package com.example.personal_finance_tracker.controller;
 
-
 import com.example.personal_finance_tracker.model.Transaction;
 import com.example.personal_finance_tracker.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
 
 import java.util.List;
 
@@ -41,13 +40,17 @@ public class NavController {
     }
 
     @PostMapping("/transactions")
-    public String addTransaction(@ModelAttribute("transaction") Transaction transaction) {
+    public String addTransaction(@Valid @ModelAttribute("transaction") Transaction transaction,
+                                 BindingResult result) {
+        if (result.hasErrors()) {
+            return "add-transaction";
+        }
         transactionService.saveTransaction(transaction);
         return "redirect:/transactions";
     }
 
     @GetMapping("/transactions/delete/{id}")
-    public String deleteTransaction(Long id) {
+    public String deleteTransaction(@PathVariable("id") Long id) {
         transactionService.deleteTransaction(id);
         return "redirect:/transactions";
     }

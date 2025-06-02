@@ -4,38 +4,119 @@
     <meta charset="UTF-8">
     <title>Add Transaction</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"  rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; font-family: sans-serif; }
+        .form-container { max-width: 500px; margin: 3rem auto; padding: 2rem; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #343a40; }
+    </style>
 </head>
 <body>
-<div class="container mt-4">
+
+<div class="form-container">
     <h2>Add New Transaction</h2>
+
     <form th:action="@{/transactions}" th:object="${transaction}" method="post">
+        <!-- Description -->
         <div class="mb-3">
             <label class="form-label">Description</label>
             <input type="text" th:field="*{description}" class="form-control" required />
         </div>
+
+        <!-- Amount -->
         <div class="mb-3">
             <label class="form-label">Amount</label>
             <input type="number" step="0.01" th:field="*{amount}" class="form-control" required />
         </div>
-        <div class="mb-3">
-            <label class="form-label">Category</label>
-            <input type="text" th:field="*{category}" class="form-control" required />
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Date</label>
-            <input type="date" th:field="*{date}" class="form-control" required />
-        </div>
+
+        <!-- Type -->
         <div class="mb-3">
             <label class="form-label">Type</label>
-            <select th:field="*{type}" class="form-select" required>
+            <select id="typeSelect" class="form-select" required>
                 <option value="">-- Select --</option>
                 <option value="Income">Income</option>
                 <option value="Expense">Expense</option>
             </select>
+            <!-- Hidden input for Thymeleaf binding -->
+            <input type="hidden" th:field="*{type}" id="typeInput"/>
+            <!-- Validation error -->
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('type')}" th:text="${#fields.errors('type')[0]}"></div>
         </div>
+
+        <!-- Category -->
+        <div class="mb-3">
+            <label class="form-label">Category</label>
+            <!-- Hidden input for Thymeleaf binding -->
+            <input type="hidden" th:field="*{category}" id="categoryInput"/>
+            <select id="categorySelect" class="form-select" required disabled>
+                <option value="">-- Select Type First --</option>
+            </select>
+            <!-- Validation error -->
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('category')}" th:text="${#fields.errors('category')[0]}"></div>
+        </div>
+
+        <!-- Date -->
+        <div class="mb-3">
+            <label class="form-label">Date</label>
+            <input type="date" th:field="*{date}" class="form-control" required />
+        </div>
+
+        <!-- Submit -->
         <button type="submit" class="btn btn-primary">Save</button>
         <a th:href="@{/transactions}" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
-</body>
-</html>
+
+<!-- JavaScript for Dynamic Fields -->
+<script>
+    const typeSelect = document.getElementById("typeSelect");
+    const categorySelect = document.getElementById("categorySelect");
+    const categoryInput = document.getElementById("categoryInput");
+    const typeInput = document.getElementById("typeInput");
+
+    const categories = {
+        Income: ["Salary", "Business Income", "Investments", "Other Income"],
+        Expense: [
+            "Food",
+            "Clothes Shopping",
+            "Rent",
+            "Electronics Shopping",
+            "Grocery",
+            "Travel Expense",
+            "Health Expense",
+            "Business Expense",
+            "Medicines",
+            "Other Expense"
+        ]
+    };
+
+    // Sync visible selection to hidden input for 'type'
+    typeSelect.addEventListener("change", () => {
+        const selectedType = typeSelect.value;
+        categorySelect.innerHTML = "";
+        categoryInput.value = "";
+
+        if (selectedType && categories[selectedType]) {
+            categorySelect.disabled = false;
+            categories[selectedType].forEach(opt => {
+                const option = document.createElement("option");
+                option.value = opt;
+                option.textContent = opt;
+                categorySelect.appendChild(option);
+            });
+        } else {
+            const defaultOption = document.createElement("option");
+            defaultOption.textContent = "-- Select Type First --";
+            defaultOption.value = "";
+            categorySelect.innerHTML = "";
+            categorySelect.appendChild(defaultOption);
+            categorySelect.disabled = true;
+        }
+
+        typeInput.value = selectedType;
+    });
+
+    // Sync category selection to hidden input
+    categorySelect.addEventListener("change", () => {
+        categoryInput.value = categorySelect.value;
+    });
+</script>

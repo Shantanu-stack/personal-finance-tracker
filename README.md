@@ -13,3 +13,16 @@
 ![Image](https://github.com/user-attachments/assets/155536db-4193-448f-8854-acc9204ebe8f)
 
 ![Image](https://github.com/user-attachments/assets/e1ce4ae7-1701-4b56-aff6-c08adb2379aa)
+
+
+## Tech Stack
+
+- Java 17+
+- Spring Boot
+- Spring Data JPA
+- Spring Security
+- Maven or Gradle
+- MySQL/PostgreSQL
+- Thymeleaf (if using a web UI) / REST API (for frontend integration)
+
+---

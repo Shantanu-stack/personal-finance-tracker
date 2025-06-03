@@ -26,3 +26,20 @@
 - Thymeleaf (if using a web UI) / REST API (for frontend integration)
 
 ---
+
+## Prerequisites
+
+- Java 17 or higher
+- Maven or Gradle
+- MySQL/PostgreSQL
+- Git
+
+---
+
+## Getting Started
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/your-username/personal-finance-tracker.git
+cd personal-finance-tracker

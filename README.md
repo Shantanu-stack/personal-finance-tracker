@@ -45,7 +45,7 @@ git clone https://github.com/your-username/personal-finance-tracker.git
 cd personal-finance-tracker
 
 
-### 2. Configure the database
+###2. Configure Database
 Update the application.properties or application.yml file with your database credentials:
 
 properties

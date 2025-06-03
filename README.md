@@ -43,3 +43,15 @@
 ```bash
 git clone https://github.com/your-username/personal-finance-tracker.git
 cd personal-finance-tracker
+
+
+### 2. Configure the database
+Update the application.properties or application.yml file with your database credentials:
+
+properties
+Copy code
+spring.datasource.url=jdbc:mysql://localhost:3306/finance_tracker
+spring.datasource.username=your_db_username
+spring.datasource.password=your_db_password
+
+spring.jpa.hibernate.ddl-auto=update

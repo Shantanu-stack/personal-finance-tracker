@@ -7,3 +7,9 @@
 ### Transactions ###
 
 ![Image](https://github.com/user-attachments/assets/1a3ff388-5449-4a37-a21d-7c533de72991)
+
+### Add New Transaction ###
+
+![Image](https://github.com/user-attachments/assets/155536db-4193-448f-8854-acc9204ebe8f)
+
+![Image](https://github.com/user-attachments/assets/e1ce4ae7-1701-4b56-aff6-c08adb2379aa)
